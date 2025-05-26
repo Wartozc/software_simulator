@@ -1,7 +1,16 @@
 rootProject.name = 'Software_Simulator'
 
-
+//Modules
 include ':web-application'
-
+include ':usecase'
+include ':model'
+include ':dynamodb'
+include ':reactive-web'
+//Modules paths
 project(':web-application').projectDir = file('./application/web-application')
+project(':usecase').projectDir = file('./domain/usecase')
+project(':model').projectDir = file('./domain/model')
+project(':dynamodb').projectDir = file('./infrastructure/driven-adapters/dynamodb')
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+
 
