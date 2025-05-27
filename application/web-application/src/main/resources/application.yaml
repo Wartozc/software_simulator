@@ -22,6 +22,13 @@ Management:
 
 springdoc:
   swagger-ui:
-    path: doc/swagger-ui/index.html
+    path: /doc/swagger-ui/index.html
   api-docs:
-    path: doc/api-docs
+    path: /doc/api-docs
+
+api:
+  paths:
+    list-users: /users
+    create-user: /user
+    update-user: /user/{id}
+    delete-user: /user/{id}

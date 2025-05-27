@@ -1,4 +1,5 @@
 
 dependencies {
+    implementation project(':reactive-web')
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.5.0'
 }
