@@ -5,13 +5,15 @@ import lombok.Getter;
 import java.util.regex.Pattern;
 
 @Getter
-public class Email {
+public class Account {
     private final String email;
+    private final String password;
 
     private static final Pattern PATTERN = Pattern.compile("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
 
-    public Email(String email) {
+    public Account(String email, String password) {
         if (!PATTERN.matcher(email).matches()) throw new RuntimeException("Correo Invalido");
         this.email = email;
+        this.password = password;
     }
 }

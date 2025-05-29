@@ -1,5 +1,8 @@
 
 dependencies {
     implementation project(':reactive-web')
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation project(':dynamodb')
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.5.0'
 }

@@ -1,15 +1,32 @@
 package co.com.simulator;
 
+import co.com.simulator.dto.UserDTO;
+import co.com.simulator.usecase.CreatorUseCase;
+import co.com.simulator.util.RequestUtil;
+import co.com.simulator.util.ResponseUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Component
+@RequiredArgsConstructor
 public class HandlerSimulator {
 
+    private final CreatorUseCase creatorUseCase;
+
+    private final ModelMapperSimulator<UserDTO> modelMapperSimulator;
+
     public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
-        return ServerResponse.ok().bodyValue("Creación exitosa");
+        return RequestUtil.buildRequestCreateUser(serverRequest)
+                .map(modelMapperSimulator::toUser)
+                .map(user -> user.toBuilder().userId(UUID.randomUUID().toString()).build())
+                .flatMap(creatorUseCase::createUser)
+                .map(modelMapperSimulator::fromUser)
+                .flatMap(ResponseUtil::buildResponseCreateUser);
     }
 
     public Mono<ServerResponse> listUsers(ServerRequest serverRequest) {

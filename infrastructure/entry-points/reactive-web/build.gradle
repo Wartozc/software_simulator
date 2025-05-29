@@ -1,5 +1,6 @@
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
+    implementation project(':model-mapper')
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.8'
 }
