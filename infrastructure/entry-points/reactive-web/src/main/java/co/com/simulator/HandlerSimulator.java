@@ -4,6 +4,7 @@ import co.com.simulator.dto.UserDTO;
 import co.com.simulator.usecase.CreatorUseCase;
 import co.com.simulator.util.RequestUtil;
 import co.com.simulator.util.ResponseUtil;
+import co.com.simulator.validator.RequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -17,11 +18,12 @@ import java.util.UUID;
 public class HandlerSimulator {
 
     private final CreatorUseCase creatorUseCase;
+    private final RequestValidator requestValidator;
 
     private final ModelMapperSimulator<UserDTO> modelMapperSimulator;
 
     public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
-        return RequestUtil.buildRequestCreateUser(serverRequest)
+        return RequestUtil.buildRequestCreateUser(serverRequest, requestValidator)
                 .map(modelMapperSimulator::toUser)
                 .map(user -> user.toBuilder().userId(UUID.randomUUID().toString()).build())
                 .flatMap(creatorUseCase::createUser)

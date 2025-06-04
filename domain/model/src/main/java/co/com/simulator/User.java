@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @Builder(toBuilder = true)
 @NoArgsConstructor
+@ToString
 public class User {
     private String userId;
     private String name;

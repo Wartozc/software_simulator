@@ -1,7 +1,10 @@
 package co.com.simulator.dto;
 
-import co.com.simulator.Account;
-import lombok.*;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @Setter
@@ -12,5 +15,6 @@ public class UserDTO {
     private String name;
     private String documentType;
     private String documentNumber;
-    private Account account;
+    @Valid
+    private AccountDTO account;
 }
