@@ -1,0 +1,6 @@
+api:
+  paths:
+    list-users: /users
+    create-user: /user
+    update-user: /user/{id}
+    delete-user: /user/{id}
