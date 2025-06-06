@@ -1,5 +1,7 @@
 package co.com.simulator;
 
+import co.com.simulator.user.Account;
+import co.com.simulator.user.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

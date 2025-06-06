@@ -1,4 +1,4 @@
-package co.com.simulator;
+package co.com.simulator.user;
 
 import lombok.*;
 

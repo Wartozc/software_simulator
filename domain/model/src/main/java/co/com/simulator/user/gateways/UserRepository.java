@@ -1,6 +1,6 @@
-package co.com.simulator.gateways;
+package co.com.simulator.user.gateways;
 
-import co.com.simulator.User;
+import co.com.simulator.user.User;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

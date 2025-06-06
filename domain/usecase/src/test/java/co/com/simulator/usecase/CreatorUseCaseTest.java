@@ -1,8 +1,8 @@
 package co.com.simulator.usecase;
 
-import co.com.simulator.Account;
-import co.com.simulator.User;
-import co.com.simulator.gateways.UserRepository;
+import co.com.simulator.user.Account;
+import co.com.simulator.user.User;
+import co.com.simulator.user.gateways.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

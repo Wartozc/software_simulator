@@ -1,5 +1,6 @@
 package co.com.simulator;
 
+import co.com.simulator.user.User;
 import org.modelmapper.ModelMapper;
 
 public class ModelMapperSimulator<T> {

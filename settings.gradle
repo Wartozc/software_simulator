@@ -7,6 +7,7 @@ include ':model'
 include ':dynamodb'
 include ':reactive-web'
 include ':model-mapper'
+include ':exception'
 
 //Modules paths
 project(':web-application').projectDir = file('./application/web-application')
@@ -15,4 +16,5 @@ project(':model').projectDir = file('./domain/model')
 project(':dynamodb').projectDir = file('./infrastructure/driven-adapters/dynamodb')
 project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
 project(':model-mapper').projectDir = file('./infrastructure/helpers/model-mapper')
+project(':exception').projectDir = file('./infrastructure/helpers/exception')
 

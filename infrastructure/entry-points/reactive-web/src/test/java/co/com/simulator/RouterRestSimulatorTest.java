@@ -4,6 +4,8 @@ import co.com.simulator.config.ApiPaths;
 import co.com.simulator.config.MapperConfig;
 import co.com.simulator.dto.UserDTO;
 import co.com.simulator.usecase.CreatorUseCase;
+import co.com.simulator.user.Account;
+import co.com.simulator.user.User;
 import co.com.simulator.validator.RequestValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

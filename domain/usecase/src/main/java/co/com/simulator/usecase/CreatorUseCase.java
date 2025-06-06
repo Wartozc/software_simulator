@@ -1,7 +1,7 @@
 package co.com.simulator.usecase;
 
-import co.com.simulator.User;
-import co.com.simulator.gateways.UserRepository;
+import co.com.simulator.user.User;
+import co.com.simulator.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
