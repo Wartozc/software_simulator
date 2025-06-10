@@ -10,6 +10,9 @@ import reactor.core.publisher.Mono;
 public class ResponseUtil {
 
     public Mono<ServerResponse> buildResponseCreateUser(UserDTO user) {
+        var userAccount = user.getAccount();
+        userAccount.setPassword("*********");
+        user.setAccount(userAccount);
         return ServerResponse.status(HttpStatus.CREATED).bodyValue(user);
     }
 }

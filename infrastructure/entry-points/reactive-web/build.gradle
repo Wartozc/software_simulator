@@ -3,6 +3,7 @@ dependencies {
     implementation project(':usecase')
     implementation project(':model-mapper')
     implementation project(':exception')
+    implementation project(':logger')
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.8'
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.5.0'
 }

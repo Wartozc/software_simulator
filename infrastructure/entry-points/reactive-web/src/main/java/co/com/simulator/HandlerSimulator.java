@@ -28,6 +28,7 @@ public class HandlerSimulator {
                 .map(user -> user.toBuilder().userId(UUID.randomUUID().toString()).build())
                 .flatMap(creatorUseCase::createUser)
                 .map(modelMapperSimulator::fromUser)
+                .doOnSuccess(userDTO -> LoggerSimulator.logInfo(userDTO.toString()))
                 .flatMap(ResponseUtil::buildResponseCreateUser);
     }
 

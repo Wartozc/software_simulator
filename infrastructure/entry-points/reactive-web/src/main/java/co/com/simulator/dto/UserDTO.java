@@ -1,15 +1,13 @@
 package co.com.simulator.dto;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @Setter
 @Getter
 @NoArgsConstructor
+@ToString
 public class UserDTO {
     private String userId;
     private String name;

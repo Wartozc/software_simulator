@@ -1,8 +1,5 @@
 package co.com.simulator;
 
-import co.com.simulator.exception.BusinessException;
-import co.com.simulator.exception.message.BusinessExceptionMessage;
-import co.com.simulator.message.TechnicalExceptionMessage;
 import co.com.simulator.user.User;
 import co.com.simulator.user.gateways.UserRepository;
 import org.springframework.stereotype.Repository;
@@ -18,7 +15,7 @@ public class DynamoDBAdapter implements UserRepository {
 
     @Override
     public Mono<User> createUser(User user) {
-
+        LoggerSimulator.logError("Se ha presentado un error en el momento de ir a la DB");
         return Mono.just(user);
     }
 
