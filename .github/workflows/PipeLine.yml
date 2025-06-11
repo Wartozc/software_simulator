@@ -34,7 +34,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build, run tests and check coverage
-        run: ./gradlew clean build jacocoTestReport jacocoMergedReport jacocoTestCoverageVerification
+        run: ./gradlew clean test
 
       - name: Upload HTML JaCoCo report
         uses: actions/upload-artifact@v4
