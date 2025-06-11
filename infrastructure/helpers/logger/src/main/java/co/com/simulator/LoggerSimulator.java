@@ -7,14 +7,18 @@ import org.slf4j.LoggerFactory;
 @UtilityClass
 public class LoggerSimulator {
 
-    public static String TRANSACTION_ID = "";
+    private String transactionId = "";
+
+    public static void setTransactionId(String transactionId) {
+        LoggerSimulator.transactionId = transactionId;
+    }
 
     public void logInfo(String message) {
-        getLogger(getClazz()).info(buildMessage(TRANSACTION_ID, message));
+        getLogger(getClazz()).info(buildMessage(LoggerSimulator.transactionId, message));
     }
 
     public void logError(String message) {
-        getLogger(getClazz()).info(buildMessage(TRANSACTION_ID, message));
+        getLogger(getClazz()).info(buildMessage(LoggerSimulator.transactionId, message));
     }
 
     private Logger getLogger(String clazz) {

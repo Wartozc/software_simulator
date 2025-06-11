@@ -15,7 +15,7 @@ public class RequestInterceptor implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        LoggerSimulator.TRANSACTION_ID = UUID.randomUUID().toString();
+        LoggerSimulator.setTransactionId(UUID.randomUUID().toString());
         return chain.filter(exchange);
     }
 }

@@ -3,6 +3,12 @@ package co.com.simulator;
 import co.com.simulator.config.ApiPaths;
 import co.com.simulator.config.MapperConfig;
 import co.com.simulator.dto.UserDTO;
+import co.com.simulator.exception.BusinessException;
+import co.com.simulator.exception.ExceptionDTO;
+import co.com.simulator.exception.WebExceptionHandler;
+import co.com.simulator.exception.message.BusinessExceptionMessage;
+import co.com.simulator.interceptor.RequestInterceptor;
+import co.com.simulator.message.TechnicalExceptionMessage;
 import co.com.simulator.usecase.CreatorUseCase;
 import co.com.simulator.user.Account;
 import co.com.simulator.user.User;
@@ -27,7 +33,9 @@ import static org.mockito.Mockito.when;
         HandlerSimulator.class,
         RequestValidator.class,
         MapperConfig.class,
-        ApiPaths.class
+        ApiPaths.class,
+        RequestInterceptor.class,
+        WebExceptionHandler.class
 })
 class RouterRestSimulatorTest {
     @Autowired
@@ -69,7 +77,119 @@ class RouterRestSimulatorTest {
                     Assertions.assertEquals(userDto.getDocumentType(), "CC");
                     Assertions.assertEquals(userDto.getDocumentNumber(), "555555555");
                     Assertions.assertEquals(userDto.getAccount().getEmail(), "test@gmail.com");
-                    Assertions.assertEquals(userDto.getAccount().getPassword(), "Walther12345");
+                    Assertions.assertEquals(userDto.getAccount().getPassword(), "*********");
                 });
+    }
+
+    @Test
+    void shouldReturnBusinessException() {
+        var body = """
+                {
+                    "name": "Walther Zapata",
+                    "documentType": "CC",
+                    "documentNumber": "555555555",
+                    "account": {
+                        "email": "test@gmail.com",
+                        "password": "Walther12345"
+                    }
+                }
+                """;
+
+        when(creatorUseCase.createUser(any(User.class))).thenReturn(Mono
+                .error(new BusinessException(BusinessExceptionMessage.UN_EXPECTED_ERROR)));
+
+        webTestClient.post().uri("/user")
+                .header("Content-Type", "application/json")
+                .bodyValue(body).exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody(ExceptionDTO.class)
+                .consumeWith(exceptionDTOEntityExchangeResult ->
+                        Assertions.assertEquals(exceptionDTOEntityExchangeResult
+                                .getResponseBody().getCode(), "BESS0001"));
+    }
+
+    @Test
+    void shouldReturnTechnicalException() {
+        var body = """
+                {
+                    "name": "Walther Zapata",
+                    "documentType": "CC",
+                    "documentNumber": "555555555",
+                    "account": {
+                        "email": "test@gmail.com",
+                        "password": "Walther12345"
+                    }
+                }
+                """;
+
+        when(creatorUseCase.createUser(any(User.class))).thenReturn(Mono
+                .error(new TechnicalException(TechnicalExceptionMessage
+                        .UN_EXPECTED_EXCEPTION, new RuntimeException())));
+
+        webTestClient.post().uri("/user")
+                .header("Content-Type", "application/json")
+                .bodyValue(body).exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody(ExceptionDTO.class)
+                .consumeWith(exceptionDTOEntityExchangeResult ->
+                        Assertions.assertEquals(exceptionDTOEntityExchangeResult
+                                .getResponseBody().getCode(), "TESS0001"));
+    }
+
+    @Test
+    void shouldReturnThrowableException() {
+        var body = """
+                {
+                    "name": "Walther Zapata",
+                    "documentType": "CC",
+                    "documentNumber": "555555555",
+                    "account": {
+                        "email": "test@gmail.com",
+                        "password": "Walther12345"
+                    }
+                }
+                """;
+
+        when(creatorUseCase.createUser(any(User.class))).thenReturn(Mono
+                .error(new Throwable()));
+
+        webTestClient.post().uri("/user")
+                .header("Content-Type", "application/json")
+                .bodyValue(body).exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody(ExceptionDTO.class)
+                .consumeWith(exceptionDTOEntityExchangeResult ->
+                        Assertions.assertEquals(exceptionDTOEntityExchangeResult
+                                .getResponseBody().getCode(), "00000"));
+    }
+
+    @Test
+    void shouldReturnConstraintViolationException() {
+
+        var userId = UUID.randomUUID().toString();
+        var user = new User(userId, "Walther Zapata", "CC",
+                "555555555", new Account("test@gmail.com", "Walther12345"));
+
+        var body = """
+                {
+                    "name": "Walther Zapata",
+                    "documentType": "CC",
+                    "documentNumber": "555555555",
+                    "account": {
+                        "password": "Walther12345"
+                    }
+                }
+                """;
+
+        when(creatorUseCase.createUser(any(User.class))).thenReturn(Mono.just(user));
+
+        webTestClient.post().uri("/user")
+                .header("Content-Type", "application/json")
+                .bodyValue(body).exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody(ExceptionDTO.class)
+                .consumeWith(exceptionDTOEntityExchangeResult ->
+                        Assertions.assertEquals(exceptionDTOEntityExchangeResult
+                                .getResponseBody().getCode(), "00000"));
     }
 }

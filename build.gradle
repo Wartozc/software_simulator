@@ -9,6 +9,12 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version "${springVersion}" apply false
 	id 'io.spring.dependency-management' version "${springDependencyManagementVersion}" apply false
+	id'jacoco'
+}
+
+jacoco {
+	toolVersion = '0.8.11'
+	reportsDirectory.set(layout.buildDirectory.dir("reports"))
 }
 
 group = 'co.com.simulator'
@@ -26,8 +32,13 @@ configurations {
 	}
 }
 
+repositories {
+	mavenCentral()
+}
+
 subprojects {
 	apply plugin: 'java'
+	apply plugin: 'jacoco'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
 
@@ -49,4 +60,53 @@ subprojects {
 		useJUnitPlatform()
 	}
 }
+
+test.finalizedBy(project.tasks.jacocoTestReport)
+
+jacocoTestReport {
+	dependsOn = [test]
+	reports {
+		xml.setRequired true
+		xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
+		csv.setRequired false
+		html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
+	}
+}
+
+tasks.register('jacocoMergedReport', JacocoReport) {
+	dependsOn = [test, subprojects.jacocoTestReport]
+	additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+	sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+	classDirectories.setFrom files(subprojects.sourceSets.main.output)
+	executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
+	reports {
+		xml.setRequired true
+		csv.setRequired false
+		html.setRequired true
+	}
+
+}
+
+tasks.named('jacocoTestCoverageVerification', JacocoCoverageVerification).configure {
+	dependsOn jacocoMergedReport
+
+	executionData.setFrom fileTree(project.rootDir) {
+		include '**/build/jacoco/test.exec'
+	}
+
+	sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+	classDirectories.setFrom files(subprojects.sourceSets.main.output)
+
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.9
+			}
+		}
+	}
+}
+
+jacocoTestReport.finalizedBy(tasks.jacocoTestCoverageVerification)
+
+
 
