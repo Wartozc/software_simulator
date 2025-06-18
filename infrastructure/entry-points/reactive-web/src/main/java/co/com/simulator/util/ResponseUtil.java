@@ -15,4 +15,8 @@ public class ResponseUtil {
         user.setAccount(userAccount);
         return ServerResponse.status(HttpStatus.CREATED).bodyValue(user);
     }
+
+    public Mono<ServerResponse> buildAuthenticationResponse(String jwt) {
+        return ServerResponse.ok().bodyValue(jwt);
+    }
 }

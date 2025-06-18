@@ -1,6 +1,8 @@
 package co.com.simulator;
 
 import co.com.simulator.dto.UserDTO;
+import co.com.simulator.security.JWTHandler;
+import co.com.simulator.usecase.AuthenticationUseCase;
 import co.com.simulator.usecase.CreatorUseCase;
 import co.com.simulator.util.RequestUtil;
 import co.com.simulator.util.ResponseUtil;
@@ -18,9 +20,10 @@ import java.util.UUID;
 public class HandlerSimulator {
 
     private final CreatorUseCase creatorUseCase;
+    private final AuthenticationUseCase authenticationUseCase;
     private final RequestValidator requestValidator;
-
     private final ModelMapperSimulator<UserDTO> modelMapperSimulator;
+    private final JWTHandler jwtHandler;
 
     public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
         return RequestUtil.buildRequestCreateUser(serverRequest, requestValidator)
@@ -44,4 +47,12 @@ public class HandlerSimulator {
         return ServerResponse.ok().bodyValue("Usuario eliminado correctamente");
     }
 
+    public Mono<ServerResponse> loginUser(ServerRequest serverRequest) {
+        return RequestUtil.buildRequestAuthentication(serverRequest)
+                .flatMap(userAuthenticationDTO -> authenticationUseCase
+                        .getAuthenticationForUser(userAuthenticationDTO.getUserName(),
+                                userAuthenticationDTO.getPassword()))
+                .flatMap(jwtHandler::generateJwtWithUserName)
+                .flatMap(ResponseUtil::buildAuthenticationResponse);
+    }
 }

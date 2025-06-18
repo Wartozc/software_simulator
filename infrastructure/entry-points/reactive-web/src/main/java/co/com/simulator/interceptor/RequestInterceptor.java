@@ -11,8 +11,6 @@ import java.util.UUID;
 
 @Component
 public class RequestInterceptor implements WebFilter {
-
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         LoggerSimulator.setTransactionId(UUID.randomUUID().toString());

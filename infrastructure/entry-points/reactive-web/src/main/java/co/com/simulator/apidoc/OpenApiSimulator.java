@@ -21,4 +21,8 @@ public class OpenApiSimulator {
     public static Builder deleteUser(Builder builder) {
         return builder.operationId("Creación de usuario");
     }
+
+    public static Builder loginUser(Builder builder) {
+        return builder.operationId("Autenticación del usuario");
+    }
 }

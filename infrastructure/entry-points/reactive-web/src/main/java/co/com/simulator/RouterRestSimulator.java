@@ -22,6 +22,7 @@ public class RouterRestSimulator {
                         OpenApiSimulator::updateUser)
                 .DELETE(apiPaths.getDeleteUser(), handlerSimulator::deleteUser,
                         OpenApiSimulator::deleteUser)
+                .POST(apiPaths.getLogin(), handlerSimulator::loginUser, OpenApiSimulator::loginUser)
                 .build();
     }
 }

@@ -14,4 +14,5 @@ public class ApiPaths {
     private String createUser;
     private String updateUser;
     private String deleteUser;
+    private String login;
 }
