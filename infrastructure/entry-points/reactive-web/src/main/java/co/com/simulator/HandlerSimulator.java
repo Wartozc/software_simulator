@@ -53,6 +53,7 @@ public class HandlerSimulator {
                         .getAuthenticationForUser(userAuthenticationDTO.getUserName(),
                                 userAuthenticationDTO.getPassword()))
                 .flatMap(jwtHandler::generateJwtWithUserName)
-                .flatMap(ResponseUtil::buildAuthenticationResponse);
+                .flatMap(ResponseUtil::buildAuthenticationResponse)
+                .doOnSuccess(isOk -> LoggerSimulator.logInfo("User authenticated"));
     }
 }

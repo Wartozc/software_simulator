@@ -1,7 +1,6 @@
 package co.com.simulator.security;
 
 import co.com.simulator.interceptor.JWTVerificationInterceptor;
-import co.com.simulator.interceptor.RequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +22,8 @@ public class SimulatorSecurity {
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec
                         .pathMatchers("/login").permitAll()
-                        .pathMatchers("/users").permitAll()
+                        .pathMatchers("/health").permitAll()
+                        .pathMatchers("/doc/**").permitAll()
                         .anyExchange().authenticated())
                 .addFilterAt(requestInterceptor, SecurityWebFiltersOrder.AUTHENTICATION)
                 .build();

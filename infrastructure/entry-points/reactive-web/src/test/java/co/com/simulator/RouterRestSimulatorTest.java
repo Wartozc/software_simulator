@@ -7,13 +7,17 @@ import co.com.simulator.exception.BusinessException;
 import co.com.simulator.exception.ExceptionDTO;
 import co.com.simulator.exception.WebExceptionHandler;
 import co.com.simulator.exception.message.BusinessExceptionMessage;
-import co.com.simulator.interceptor.RequestInterceptor;
+import co.com.simulator.interceptor.JWTVerificationInterceptor;
 import co.com.simulator.message.TechnicalExceptionMessage;
+import co.com.simulator.security.JWTHandler;
+import co.com.simulator.security.SimulatorSecurity;
+import co.com.simulator.usecase.AuthenticationUseCase;
 import co.com.simulator.usecase.CreatorUseCase;
 import co.com.simulator.user.Account;
 import co.com.simulator.user.User;
 import co.com.simulator.validator.RequestValidator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -34,8 +38,10 @@ import static org.mockito.Mockito.when;
         RequestValidator.class,
         MapperConfig.class,
         ApiPaths.class,
-        RequestInterceptor.class,
-        WebExceptionHandler.class
+        JWTVerificationInterceptor.class,
+        WebExceptionHandler.class,
+        JWTHandler.class,
+        SimulatorSecurity.class
 })
 class RouterRestSimulatorTest {
     @Autowired
@@ -43,6 +49,25 @@ class RouterRestSimulatorTest {
 
     @MockitoBean
     private CreatorUseCase creatorUseCase;
+
+    @MockitoBean
+    private AuthenticationUseCase authenticationUseCase;
+
+    private String jwt;
+
+    @BeforeEach
+    void setUp() {
+        when(authenticationUseCase.getAuthenticationForUser(any(String.class), any(String.class)))
+                .thenReturn(Mono.just("wartotest@test.com"));
+
+        webTestClient.post().uri("/login")
+                .header("Content-Type", "application/json")
+                .header("user-name", "wartotest@test.com")
+                .header("password", "test123456")
+                .exchange().expectStatus().is2xxSuccessful()
+                .expectBody(String.class)
+                .consumeWith(jwtResponse -> this.jwt = jwtResponse.getResponseBody());
+    }
 
     @Test
     void shouldCreateAnUserSuccessFully() {
@@ -67,6 +92,7 @@ class RouterRestSimulatorTest {
 
         webTestClient.post().uri("/user")
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + this.jwt)
                 .bodyValue(body).exchange()
                 .expectStatus().isCreated()
                 .expectBody(UserDTO.class)
@@ -100,6 +126,7 @@ class RouterRestSimulatorTest {
 
         webTestClient.post().uri("/user")
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + this.jwt)
                 .bodyValue(body).exchange()
                 .expectStatus().is4xxClientError()
                 .expectBody(ExceptionDTO.class)
@@ -128,6 +155,7 @@ class RouterRestSimulatorTest {
 
         webTestClient.post().uri("/user")
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + this.jwt)
                 .bodyValue(body).exchange()
                 .expectStatus().is4xxClientError()
                 .expectBody(ExceptionDTO.class)
@@ -155,6 +183,7 @@ class RouterRestSimulatorTest {
 
         webTestClient.post().uri("/user")
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + this.jwt)
                 .bodyValue(body).exchange()
                 .expectStatus().is4xxClientError()
                 .expectBody(ExceptionDTO.class)
@@ -185,6 +214,7 @@ class RouterRestSimulatorTest {
 
         webTestClient.post().uri("/user")
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + this.jwt)
                 .bodyValue(body).exchange()
                 .expectStatus().is4xxClientError()
                 .expectBody(ExceptionDTO.class)
