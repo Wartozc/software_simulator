@@ -2,4 +2,8 @@ dependencies {
     implementation project(':model')
     implementation project(':exception')
     implementation project(':logger')
+    implementation project(':model-mapper')
+
+    implementation 'software.amazon.awssdk:dynamodb-enhanced:2.31.74'
+
 }
