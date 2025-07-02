@@ -11,7 +11,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 @Repository
-public class DynamoDBAdapter implements UserRepository {
+public class DynamoDBAdapter /*implements UserRepository */{
 
     private final ModelMapperSimulator<?> modelMapperSimulator;
     private final DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient;
@@ -24,24 +24,24 @@ public class DynamoDBAdapter implements UserRepository {
         this.modelMapperSimulator = new ModelMapperSimulator<>(UserDBO.class);
     }
 
-    @Override
+    //@Override
     public Flux<User> listAllUsers() {
         return null;
     }
 
-    @Override
+    //@Override
     public Mono<User> createUser(User user) {
         return Mono.fromFuture(dynamoDbAsyncTable.putItem((UserDBO) modelMapperSimulator.fromUser(user)))
                 .doOnSuccess(isOk -> LoggerSimulator.logInfo("Se ha guardado el usuario en la DB"))
                 .thenReturn(user);
     }
 
-    @Override
+    //@Override
     public Mono<User> updateUser(User user) {
         return null;
     }
 
-    @Override
+    //@Override
     public Mono<Boolean> deleteUser(String userId) {
         return null;
     }

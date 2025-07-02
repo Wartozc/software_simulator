@@ -5,6 +5,7 @@ dependencies {
     implementation project(':usecase')
     implementation project(':dynamodb')
     implementation project(':exception')
+    implementation project(':r2dbc')
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.5.0'
 }

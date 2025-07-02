@@ -9,6 +9,7 @@ include ':reactive-web'
 include ':model-mapper'
 include ':exception'
 include ':logger'
+include ':r2dbc'
 
 //Modules paths
 project(':web-application').projectDir = file('./application/web-application')
@@ -19,5 +20,5 @@ project(':reactive-web').projectDir = file('./infrastructure/entry-points/reacti
 project(':model-mapper').projectDir = file('./infrastructure/helpers/model-mapper')
 project(':exception').projectDir = file('./infrastructure/helpers/exception')
 project(':logger').projectDir = file('./infrastructure/helpers/logger')
-
+project(':r2dbc').projectDir = file('./infrastructure/driven-adapters/r2dbc')
 
