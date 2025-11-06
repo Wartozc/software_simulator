@@ -39,7 +39,5 @@ class CreatorUseCaseTest {
         StepVerifier.create(creatorUseCase.createUser(user))
                 .expectNext(user)
                 .verifyComplete();
-
-
     }
 }

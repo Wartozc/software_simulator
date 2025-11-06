@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MapperConfig {
-
     @Bean
     public ModelMapperSimulator<UserDTO> getMapper() {
         return new ModelMapperSimulator<>(UserDTO.class);
